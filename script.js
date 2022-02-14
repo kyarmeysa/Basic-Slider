@@ -33,7 +33,15 @@ var models = [
 ];
 var index = 0;
 var count = models.length;
-ShowSlide(index);
+var settings={
+    duration: '2000',
+    random:true
+};
+var interval;
+
+
+
+init(settings);
 
 document.querySelector('.left').addEventListener('click', function () {
     
@@ -46,9 +54,21 @@ document.querySelector('.right').addEventListener('click', function () {
     
     index++;
     ShowSlide(index);
-    console.log(index)
+    
 
 });
+document.querySelectorAll('.icon').forEach(function(item){
+    item.addEventListener('mouseenter',function(){
+        clearInterval(interval);
+    })
+
+});
+document.querySelectorAll('.icon').forEach (function (item){
+    item.addEventListener('mouseleave', function(){
+        init(settings);
+    })
+})
+
 
 function ShowSlide(i) {
     index=i;
@@ -59,11 +79,39 @@ function ShowSlide(i) {
     if(i>= count){
         index=0;
     }
+   
 
     document.querySelector('.card-title').textContent = models[index].breed;
     document.querySelector('.card-img-top').setAttribute('src', models[index].image);
     document.querySelector('.card-link').setAttribute('href', models[index].link);
 
+
+}
+function init(settings){
+    
+    var prev;
+    interval =setInterval(function(){
+        if(settings.random){
+            do {
+                index= Math.floor(Math.random() * count);
+            } while (index===prev);
+            prev=index;
+            
+        }
+        
+        else{
+            if(count==index+1){
+                index= -1;
+
+            }
+            ShowSlide(index);
+            index++;
+
+        }
+        console.log(index);
+        ShowSlide(index);
+
+    }, settings.duration)
 
 }
 
